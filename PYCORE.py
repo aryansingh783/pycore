@@ -2248,7 +2248,7 @@ class PYCOREShell:
             "║                                                                ║",
             "║  Next-Gen Python REPL + IDLE Replacement + AI Debugger         ║",
             "║  Powered by PYCORE AI  ·  Built with Python stdlib only        ║",
-            "║                                                                ║"
+            "║                                                                ║",
            f"║  Created by {self.AUTHOR:<51}║",
             "║  GitHub: github.com/aryansingh783                              ║",
             "║  Instagram: @aryan.singh.783                                   ║",
