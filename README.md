@@ -1,203 +1,209 @@
-# 🚀 PYCORE AI SHELL
+<div align="center">
 
-> Futuristic AI-Powered Python Shell for Students & Beginners
+# PYCORE IDE
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python)
-![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Platform-Windows-informational?style=for-the-badge)
-![AI Powered](https://img.shields.io/badge/AI-Powered-purple?style=for-the-badge)
+### The Python IDE that brings its own Python.
 
----
+A fully portable Python IDE with a **bundled interpreter** and **working pip** — copy the folder to any Windows PC and write, run, and `pip install`, even on machines that have never had Python installed.
 
-# ⚡ What is PYCORE AI SHELL?
+Built for students, school labs, and thin clients.
 
-PYCORE AI SHELL is a futuristic Python terminal designed specially for:
+![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-58a6ff?style=flat-square)
+![Python](https://img.shields.io/badge/python-bundled-3fb950?style=flat-square)
+![pip](https://img.shields.io/badge/pip-works%20offline--install-bc8cff?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-orange?style=flat-square)
 
-- 👨‍🎓 Students
-- 🧠 Beginners
-- 💻 Python learners
-- 🛠 Debugging practice
-- 📚 School IP practicals
+[Download](#download) · [Features](#features) · [Install](#installation) · [vs IDLE](#pycore-ide-vs-python-idle) · [Build from source](#build-from-source)
 
-Unlike normal Python shells, PYCORE AI SHELL provides:
-
-✅ AI-powered error explanations  
-✅ Beginner-friendly debugging  
-✅ Cyberpunk UI  
-✅ Smart built-in commands  
-✅ Interactive learning experience  
+</div>
 
 ---
 
-# 🖼 Preview
+## Why PYCORE IDE?
 
-## Cyberpunk Terminal UI
-- Futuristic startup animation
-- Neon themes
-- AI debugging panels
-- Smart terminal experience
+Most Python IDEs assume Python is already installed and set up correctly. In a school lab, on a friend's laptop, or on a locked-down thin client, that assumption breaks — "Python is not recognized", missing PATH, no admin rights.
+
+PYCORE IDE ships a **real Python interpreter inside the app**. No installer, no setup. Extract the folder, double-click, and you're coding. `pip install` works from inside the app, so you can pull in `pandas`, `requests`, anything — and the packages stay in the app folder for next time.
 
 ---
 
-# 🔥 Features
+## Download
 
-## 🤖 AI Error Explanation
-Understand Python errors in simple Hinglish.
+> **Windows 10/11 (64-bit).** No Python required.
 
-Example:
-```python
-x = [1,2,3]
-print(x[5])
-```
+**[⬇ Download the latest release](../../releases/latest)** — grab `PYCORE_IDE.zip`, extract it, and run `PYCORE_IDE.exe`.
 
-PYCORE explains:
-- kya error hai
-- kyun aaya
-- kaise fix kare
-- correct code kya hoga
+That's the whole installation. See [Installation](#installation) for the step-by-step.
 
 ---
 
-## 🎨 Multiple Themes
+## Features
 
-Available themes:
-- Cyberpunk
-- Matrix
-- Hacker
-- Neon
-- Midnight
-- Aurora
-
-Use:
-```python
-:theme matrix
-```
+| | Feature | What it does |
+|---|---|---|
+| 📦 | **Bundled Python** | A real interpreter ships inside the app. Runs on any Windows PC with nothing pre-installed. |
+| 🔌 | **Working pip** | Install packages at runtime — `pip install pandas` — straight from the IDE. They persist in the app folder. |
+| 🤖 | **AI error help** | Get the cause, fix, and corrected code in simple Hinglish. Works with **PYCORE AI (local), Gemini, ChatGPT, or Claude**. |
+| 🎓 | **Tutor Mode** | AI gives hints and a guiding question instead of the answer — so students actually learn to debug. |
+| ▶️ | **Interactive console** | A live Python REPL like IDLE's shell — variables persist, command history, run a file straight into it. |
+| 🔎 | **Variables panel** | After every run, see each variable's name, type, and value at a glance. |
+| 🟥 | **Error line highlight** | The exact line that failed turns red in the editor. |
+| 📚 | **Ready examples** | Ten built-in starter programs — loops, lists, dictionaries, functions, file handling — one click to load. |
+| ⌨️ | **input() support** | Programs that ask for input work, with a clear visual cue showing where to type. |
+| 🎨 | **Modern dark UI** | Tabs, syntax highlighting, line numbers, auto-indent, animated splash screen. |
 
 ---
 
-## ⚡ Smart Commands
+## Installation
 
-| Command | Description |
+No installer. Three steps:
+
+1. **Download** `PYCORE_IDE.zip` from the [Releases page](../../releases/latest).
+2. **Extract** the folder fully (right-click → Extract All). Don't run from inside the ZIP. A USB drive or any local folder works.
+3. **Run** `PYCORE_IDE.exe` inside the extracted folder.
+
+> If Windows shows a blue **"Windows protected your PC"** box, click **More info → Run anyway**. The app is safe — it's just unsigned.
+
+### Optional: turn on AI
+
+Open **⚙ Settings**, pick an AI provider, paste your key (or PYCORE AI URL), and Save.
+
+### Optional: install packages
+
+Type a command in the bottom box, e.g. `pip install requests`, and hit **Run pip**. The package stays in the app folder for next time.
+
+---
+
+## System Requirements
+
+| | |
 |---|---|
-| `:help` | Show commands |
-| `:vars` | Show variables |
-| `:stats` | Session stats |
-| `:history` | Command history |
-| `:explain` | Explain last code |
-| `:theme` | Change theme |
-| `:clear` | Clear screen |
-| `:run file.py` | Run Python file |
+| **Operating system** | Windows 10 / 11 (64-bit) |
+| **Python pre-installed** | Not required |
+| **RAM** | 2 GB minimum, 4 GB recommended |
+| **Disk space** | ~300 MB (bundled Python + app) |
+| **Internet** | Only for pip & AI features |
+| **Admin rights** | Not needed — fully portable |
+
+> On locked-down thin clients, running `.exe` files may be blocked by policy. Test from a USB drive first; if it's blocked, ask your lab admin.
 
 ---
 
-# 👨‍🎓 Built for Students
+## PYCORE IDE vs Python IDLE
 
-PYCORE AI SHELL focuses on:
+IDLE is the trusted classic. PYCORE keeps what students need and adds portability and AI on top.
 
-✅ Easy learning  
-✅ Error understanding  
-✅ Coding confidence  
-✅ School-level Python practice  
-✅ Beginner-friendly explanations  
+| Feature | PYCORE IDE | Python IDLE |
+|---|:---:|:---:|
+| Works without Python installed | ✅ Bundled | ❌ Needs Python |
+| pip install inside the app | ✅ | ⚠️ Terminal only |
+| AI error explanation | ✅ 4 providers | ❌ |
+| Tutor mode (hints, not answers) | ✅ | ❌ |
+| Interactive REPL / shell | ✅ | ✅ |
+| Variables panel after run | ✅ | ❌ |
+| Error line highlight | ✅ | ⚠️ Cursor jump only |
+| Built-in example programs | ✅ 10 | ❌ |
+| Runs from USB / shared folder | ✅ Portable | ❌ Needs install |
+| Step debugger with breakpoints | ❌ Not yet | ✅ |
+| Modern dark UI | ✅ | ⚠️ Basic |
 
-Perfect for:
-- Class 11 IP
-- Class 12 IP
-- Beginners learning Python
-- Students afraid of Python errors 😄
-
----
-
-# 🧠 Why PYCORE?
-
-| PYCORE AI SHELL 🚀 | Python IDLE 🐍 |
-|---|---|
-| AI Error Explain | No AI |
-| Cyberpunk UI | Simple UI |
-| Smart Commands | Limited |
-| Beginner Friendly | Basic |
-| Interactive Learning | Traditional |
+> **Honest note:** IDLE still wins on the built-in step debugger. PYCORE is best when you need portability, AI help, and a student-friendly layout — pair the two if you want both.
 
 ---
 
-# 🛠 Installation
+## Optional: PYCORE AI (free local AI)
 
-## Requirements
-- Python 3.x
-- Windows Terminal / CMD
-
-## Run
+Want AI help with no API key? Run a local model on your own PC and point the IDE to it.
 
 ```bash
-python PYCORE_AI_ULTIMATE.py
+# on your PC, with Ollama installed
+ollama serve
+
+# expose it with a Cloudflare tunnel
+cloudflared tunnel --url http://localhost:11434
+```
+
+Paste the resulting `https://…trycloudflare.com` URL into **Settings → PYCORE AI**. Keep your PC and tunnel running while you (or your students) use it.
+
+> Note: a small local model on one PC is fine for a few users. For a whole class at once, a cloud provider (Gemini free tier) is more reliable.
+
+---
+
+## Build from source
+
+Want to build the `.exe` yourself? You'll need a normal Python on your dev machine.
+
+### Requirements
+```bat
+pip install pyqt6 pyinstaller
+```
+
+### Steps
+
+```bat
+:: 1. Download the embeddable Python and enable pip (run once)
+setup_python.bat
+
+:: 2. Build the exe (bundles python\ alongside it)
+build_exe.bat
+```
+
+The result lands in `dist\PYCORE_IDE\` — a portable folder you can zip and share.
+
+### How it works
+
+PYCORE bundles the official **embeddable Python** package (from python.org) alongside the app. This is a *real, separate interpreter* — not PyInstaller's embedded Python — which is why `pip` works inside it. Your code runs in this bundled interpreter via `subprocess`, fully isolated.
+
+> PyInstaller's own embedded Python has no `pip` or `site-packages` — it only runs the app. For live `pip install`, you need the embeddable package, so the two are bundled separately.
+
+### Project structure
+
+```
+PYCORE-IDE/
+├── app/
+│   └── pycore_ide.py        # main IDE (PyQt6)
+├── build_tools/
+│   ├── setup_python.bat     # downloads embeddable Python + enables pip
+│   └── build_exe.bat        # builds the exe + bundles python\
+├── icon/
+│   └── pycore.ico           # app icon
+├── website/
+│   └── index.html           # landing page
+├── BUILD_NOTES.md           # detailed build notes (Hinglish)
+├── TEST_GUIDE.md            # full feature test checklist
+└── README.md
 ```
 
 ---
 
-# 🔑 Optional AI Setup
+## Tech stack
 
-Add your API key:
-
-```python
-:addkey YOUR_API_KEY
-```
-
-Enable AI:
-```python
-:ai on
-```
+- **UI:** PyQt6
+- **Interpreter:** Python embeddable package (bundled)
+- **Packaging:** PyInstaller (onedir)
+- **AI:** PYCORE AI (Ollama) · Gemini · OpenAI · Anthropic
 
 ---
 
-# 📸 Socials
+## Roadmap
 
-## 👨‍💻 Creator
-**Aryan Singh**
-
-📷 Instagram:  
-@aryan.singh.783
-
-🌐 GitHub:  
-https://github.com/aryansingh783
+- [ ] Step debugger with breakpoints
+- [ ] Find & replace
+- [ ] Code auto-completion
+- [ ] Multiple themes
 
 ---
 
-# 🚀 Future Plans
+## License
 
-- GUI Version
-- Auto-complete
-- Better Syntax Highlighting
-- Educational Mode
-- Teacher Dashboard
-- Offline AI System
-- School Lab Version
+Released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-# ❤️ Made For Learning Python Easier
+<div align="center">
 
-> “Making Python easier for beginners with AI-powered debugging.”
+**PYCORE IDE** — standalone Python for everyone.
 
----
+Created by **Aryan Singh**
 
-# ⭐ Support
-
-If you like this project:
-
-⭐ Star the repository  
-🍴 Fork the project  
-📢 Share with friends  
-💻 Use it for learning Python
-
----
-
-# ⚠ Disclaimer
-
-This project is educational and experimental.  
-Built for learning, debugging, and student practice purposes.
-
----
-
-# 🔥 PYCORE AI SHELL
-
-### NEXT-GEN AI POWERED PYTHON TERMINAL
+</div>
