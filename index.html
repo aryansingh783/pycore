@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYCORE IDE — Standalone Python IDE with Bundled Interpreter</title>
+<meta name="description" content="PYCORE IDE — a portable Python IDE with a bundled interpreter and working pip. No Python install needed. AI error help, interactive console, and student-friendly examples. By Aryan Singh.">
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg-alt:#161b22;
+    --panel:#11151c;
+    --fg:#c9d1d9;
+    --muted:#8b949e;
+    --cyan:#58a6ff;
+    --green:#3fb950;
+    --magenta:#bc8cff;
+    --orange:#ffa657;
+    --red:#f85149;
+    --line:#21262d;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--mono);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--cyan);color:#0d1117}
+
+  /* ---- matrix canvas behind hero ---- */
+  #matrix{position:fixed;inset:0;z-index:0;opacity:.18;pointer-events:none}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+  /* ---- top nav ---- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(13,17,23,.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-weight:700;letter-spacing:.5px;color:var(--cyan);font-size:18px}
+  .brand b{color:var(--green)}
+  .navlinks{display:flex;gap:26px;align-items:center}
+  .navlinks a{color:var(--muted);text-decoration:none;font-size:14px;transition:color .2s}
+  .navlinks a:hover{color:var(--fg)}
+  .nav-dl{
+    background:var(--green);color:#0d1117!important;
+    padding:8px 16px;border-radius:6px;font-weight:700;
+  }
+  .nav-dl:hover{background:var(--cyan)}
+  @media(max-width:640px){.navlinks a:not(.nav-dl){display:none}}
+
+  /* ---- hero ---- */
+  header{padding:70px 0 50px;position:relative}
+  .eyebrow{
+    display:inline-block;color:var(--green);font-size:13px;
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;
+    border:1px solid var(--line);padding:5px 12px;border-radius:20px;
+  }
+  .eyebrow .dot{color:var(--green);animation:blink 1.2s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  h1{
+    font-size:clamp(38px,7vw,68px);line-height:1.05;font-weight:800;
+    letter-spacing:-1px;margin-bottom:20px;
+  }
+  h1 .grad{
+    background:linear-gradient(100deg,var(--cyan),var(--magenta));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .lede{font-size:clamp(16px,2.3vw,20px);color:var(--muted);max-width:680px;margin-bottom:32px}
+  .lede b{color:var(--fg)}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{
+    text-decoration:none;font-weight:700;font-size:15px;
+    padding:14px 26px;border-radius:8px;transition:transform .15s,box-shadow .15s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{
+    background:linear-gradient(100deg,var(--green),var(--cyan));color:#0d1117;
+    box-shadow:0 0 0 0 rgba(63,185,80,.5);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px -8px rgba(88,166,255,.6)}
+  .btn-ghost{border:1px solid var(--line);color:var(--fg)}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+  .dl-meta{color:var(--muted);font-size:13px;margin-top:14px}
+  .dl-meta b{color:var(--green)}
+
+  /* ---- terminal window mock ---- */
+  .terminal{
+    margin-top:48px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);overflow:hidden;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.8);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:8px;padding:12px 16px;
+    background:var(--bg-alt);border-bottom:1px solid var(--line);
+  }
+  .term-bar .dot{width:12px;height:12px;border-radius:50%}
+  .d-red{background:#ff5f56}.d-yellow{background:#ffbd2e}.d-green{background:#27c93f}
+  .term-title{margin-left:10px;color:var(--muted);font-size:13px}
+  .term-body{padding:22px;font-size:14px;min-height:240px}
+  .term-body .ln{white-space:pre-wrap}
+  .c-cyan{color:var(--cyan)}.c-green{color:var(--green)}.c-mag{color:var(--magenta)}
+  .c-orange{color:var(--orange)}.c-muted{color:var(--muted)}.c-red{color:var(--red)}
+  .cursor{display:inline-block;width:9px;height:17px;background:var(--green);
+    vertical-align:-3px;animation:blink 1s steps(1) infinite}
+
+  /* ---- section scaffolding ---- */
+  section{padding:64px 0;position:relative;z-index:1}
+  .sec-head{margin-bottom:40px}
+  .sec-num{color:var(--green);font-size:14px;letter-spacing:2px}
+  .sec-head h2{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.5px;margin-top:6px}
+  .sec-head p{color:var(--muted);margin-top:10px;max-width:620px}
+
+  /* ---- feature grid ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:24px;transition:border-color .2s,transform .2s;
+  }
+  .card:hover{border-color:var(--cyan);transform:translateY(-3px)}
+  .card .ic{font-size:24px;margin-bottom:12px}
+  .card h3{font-size:17px;margin-bottom:8px;color:var(--fg)}
+  .card p{color:var(--muted);font-size:14px}
+
+  /* ---- comparison table ---- */
+  .cmp{border:1px solid var(--line);border-radius:12px;overflow:hidden;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:560px}
+  th,td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+  thead th{background:var(--bg-alt);font-size:13px;letter-spacing:1px;text-transform:uppercase}
+  thead th:nth-child(2){color:var(--green)}
+  tbody tr:last-child td{border-bottom:none}
+  td.feature{color:var(--muted)}
+  .yes{color:var(--green);font-weight:700}
+  .no{color:var(--red)}
+  .partial{color:var(--orange)}
+  tbody tr:hover{background:rgba(88,166,255,.04)}
+
+  /* ---- system req + steps ---- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  .req-list{list-style:none}
+  .req-list li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;font-size:14px}
+  .req-list li:last-child{border-bottom:none}
+  .req-list .k{color:var(--muted)}
+  .req-list .v{color:var(--fg);text-align:right}
+
+  .steps{counter-reset:step;list-style:none}
+  .steps li{
+    position:relative;padding:0 0 24px 52px;
+  }
+  .steps li:before{
+    counter-increment:step;content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:-2px;
+    width:34px;height:34px;border:1px solid var(--green);border-radius:8px;
+    color:var(--green);display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;
+  }
+  .steps li:not(:last-child):after{
+    content:"";position:absolute;left:17px;top:34px;bottom:6px;width:1px;background:var(--line);
+  }
+  .steps h4{font-size:15px;margin-bottom:4px}
+  .steps p{color:var(--muted);font-size:14px}
+  code.inline{background:var(--bg-alt);border:1px solid var(--line);padding:2px 7px;border-radius:5px;color:var(--cyan);font-size:13px}
+
+  pre{
+    background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;
+    padding:16px;overflow-x:auto;font-size:13px;color:var(--fg);margin-top:10px;
+  }
+  pre .c-green{color:var(--green)}pre .c-muted{color:var(--muted)}
+
+  /* ---- download band ---- */
+  .dl-band{
+    border:1px solid var(--line);border-radius:16px;
+    background:
+      radial-gradient(120% 140% at 50% 0%,rgba(88,166,255,.10),transparent 60%),
+      var(--panel);
+    padding:54px 32px;text-align:center;
+  }
+  .dl-band h2{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:14px}
+  .dl-band p{color:var(--muted);margin-bottom:28px}
+
+  footer{border-top:1px solid var(--line);padding:36px 0;margin-top:40px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;align-items:center}
+  footer .credit{color:var(--muted);font-size:14px}
+  footer .credit b{color:var(--green)}
+  footer .made{color:var(--cyan);font-weight:700}
+
+  .warn{
+    margin-top:20px;font-size:13px;color:var(--muted);
+    border-left:3px solid var(--orange);padding:10px 14px;background:rgba(255,166,87,.06);border-radius:4px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">PY<b>CORE</b> IDE</div>
+    <div class="navlinks">
+      <a href="#features">Features</a>
+      <a href="#compare">vs IDLE</a>
+      <a href="#install">Install</a>
+      <a href="#requirements">Requirements</a>
+      <a href="https://github.com/aryansingh783/pycore/releases/latest/download/PYCORE_IDE.zip" class="nav-dl" download>Download</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot">●</span> v1.0 &nbsp;·&nbsp; Windows &nbsp;·&nbsp; no Python install needed</span>
+    <h1>The Python IDE that <span class="grad">brings its own Python.</span></h1>
+    <p class="lede">PYCORE IDE is a <b>fully portable</b> Python editor with a real interpreter bundled inside. Copy the folder to any Windows PC and write, run, and <b>pip install</b> — even on machines that have never seen Python. Built for students, school labs, and thin clients.</p>
+    <div class="cta-row">
+      <a href="https://github.com/aryansingh783/pycore/releases/latest/download/PYCORE_IDE.zip" class="btn btn-primary" download>⬇ Download for Windows</a>
+      <a href="#install" class="btn btn-ghost">Installation guide</a>
+    </div>
+    <div class="dl-meta">Portable ZIP &nbsp;·&nbsp; extract &amp; run &nbsp;·&nbsp; <b>pip works offline-free</b> inside the app</div>
+
+    <!-- terminal mock -->
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="dot d-red"></span><span class="dot d-yellow"></span><span class="dot d-green"></span>
+        <span class="term-title">PYCORE IDE — student.py</span>
+      </div>
+      <div class="term-body" id="typed"></div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">// FEATURES</div>
+      <h2>Everything in one window</h2>
+      <p>No setup, no PATH errors, no "Python is not recognized." Just open and code.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="ic">📦</div><h3>Bundled Python</h3><p>A real Python interpreter ships inside the app. Runs on any Windows PC with nothing pre-installed.</p></div>
+      <div class="card"><div class="ic">🔌</div><h3>Working pip</h3><p>Install packages at runtime — <code class="inline">pip install pandas</code> — straight from the IDE. They persist in the app folder.</p></div>
+      <div class="card"><div class="ic">🤖</div><h3>PYCORE AI help</h3><p>Stuck on an error? Get the cause, fix and corrected code in simple Hinglish. Works with local AI, Gemini, ChatGPT or Claude.</p></div>
+      <div class="card"><div class="ic">🎓</div><h3>Tutor Mode</h3><p>AI gives hints and a guiding question instead of the answer — so students actually learn to debug.</p></div>
+      <div class="card"><div class="ic">▶️</div><h3>Interactive console</h3><p>A live Python REPL like IDLE's shell — variables persist, command history, run a file straight into it.</p></div>
+      <div class="card"><div class="ic">🔎</div><h3>Variables panel</h3><p>After every run, see each variable's name, type and value at a glance. Great for understanding what your code did.</p></div>
+      <div class="card"><div class="ic">🟥</div><h3>Error line highlight</h3><p>The exact line that failed turns red in the editor, so you find the mistake instantly.</p></div>
+      <div class="card"><div class="ic">📚</div><h3>Ready examples</h3><p>Ten built-in starter programs — loops, lists, dictionaries, functions, file handling — one click to load and learn.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">// COMPARISON</div>
+      <h2>PYCORE IDE vs Python IDLE</h2>
+      <p>IDLE is the trusted classic. PYCORE keeps what students need and adds portability and AI on top.</p>
+    </div>
+    <div class="cmp">
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>PYCORE IDE</th><th>Python IDLE</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="feature">Works without Python installed</td><td class="yes">Yes — bundled</td><td class="no">No — needs Python</td></tr>
+          <tr><td class="feature">pip install inside the app</td><td class="yes">Yes</td><td class="partial">Via terminal only</td></tr>
+          <tr><td class="feature">AI error explanation</td><td class="yes">Yes (4 providers)</td><td class="no">No</td></tr>
+          <tr><td class="feature">Tutor mode (hints, not answers)</td><td class="yes">Yes</td><td class="no">No</td></tr>
+          <tr><td class="feature">Interactive REPL / shell</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td class="feature">Variables panel after run</td><td class="yes">Yes</td><td class="no">No</td></tr>
+          <tr><td class="feature">Error line highlight</td><td class="yes">Yes</td><td class="partial">Cursor jump only</td></tr>
+          <tr><td class="feature">Built-in example programs</td><td class="yes">Yes — 10</td><td class="no">No</td></tr>
+          <tr><td class="feature">Runs from a USB / shared folder</td><td class="yes">Yes — portable</td><td class="no">Needs install</td></tr>
+          <tr><td class="feature">Step debugger with breakpoints</td><td class="no">Not yet</td><td class="yes">Yes</td></tr>
+          <tr><td class="feature">Modern dark UI</td><td class="yes">Yes</td><td class="partial">Basic theming</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="warn">Honest note: IDLE still wins on the built-in step debugger. PYCORE is best when you need portability, AI help, and a student-friendly layout — pair the two if you want both.</p>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">// INSTALLATION</div>
+      <h2>Up and running in under a minute</h2>
+      <p>No installer. Download, extract, double-click. That's the whole thing.</p>
+    </div>
+    <ol class="steps">
+      <li>
+        <h4>Download the ZIP</h4>
+        <p>Grab <code class="inline">PYCORE_IDE.zip</code> using the button on this page.</p>
+      </li>
+      <li>
+        <h4>Extract the folder</h4>
+        <p>Right-click the ZIP → <em>Extract All</em>. Pull it out fully — don't run from inside the ZIP. A USB drive or any local folder works.</p>
+      </li>
+      <li>
+        <h4>Open PYCORE_IDE.exe</h4>
+        <p>Inside the extracted folder, double-click <code class="inline">PYCORE_IDE.exe</code>. If Windows shows a blue "Windows protected your PC" box, click <em>More info → Run anyway</em> — the app is safe, just unsigned.</p>
+      </li>
+      <li>
+        <h4>(Optional) Turn on AI</h4>
+        <p>Open <em>⚙ Settings</em>, pick an AI provider, paste your key or PYCORE AI URL, and Save. Now error help works.</p>
+      </li>
+      <li>
+        <h4>(Optional) Install packages</h4>
+        <p>Type a command in the bottom box, e.g. <code class="inline">pip install requests</code>, and hit <em>Run pip</em>. The package stays in the app folder for next time.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="requirements">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">// SYSTEM REQUIREMENTS</div>
+      <h2>What you need</h2>
+      <p>Light on requirements — it's designed to run on basic school lab machines.</p>
+    </div>
+    <div class="two">
+      <div>
+        <ul class="req-list">
+          <li><span class="k">Operating system</span><span class="v">Windows 10 / 11 (64-bit)</span></li>
+          <li><span class="k">Python pre-installed</span><span class="v">Not required</span></li>
+          <li><span class="k">RAM</span><span class="v">2 GB minimum, 4 GB recommended</span></li>
+          <li><span class="k">Disk space</span><span class="v">~300 MB (bundled Python + app)</span></li>
+          <li><span class="k">Internet</span><span class="v">Only for pip &amp; AI features</span></li>
+          <li><span class="k">Admin rights</span><span class="v">Not needed — portable</span></li>
+        </ul>
+        <p class="warn">On locked-down thin clients, running <code class="inline">.exe</code> files may be blocked by policy. Test from a USB drive first; if it's blocked, ask your lab admin.</p>
+      </div>
+      <div>
+        <h4 style="margin-bottom:10px;color:var(--cyan)">Optional: PYCORE AI (local)</h4>
+        <p style="color:var(--muted);font-size:14px">Want free AI help with no API key? Run a local model on your own PC and point the IDE to it:</p>
+        <pre><span class="c-muted"># on your PC, with Ollama installed</span>
+ollama serve
+<span class="c-muted"># expose it with a Cloudflare tunnel</span>
+cloudflared tunnel --url http://localhost:11434</pre>
+        <p style="color:var(--muted);font-size:14px;margin-top:10px">Paste the resulting <code class="inline">https://…trycloudflare.com</code> URL into Settings → PYCORE AI. Keep your PC and tunnel running while students use it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="dl-band">
+      <h2>Ready to code?</h2>
+      <p>One ZIP. Any Windows PC. Python included.</p>
+      <a href="https://github.com/aryansingh783/pycore/releases/latest/download/PYCORE_IDE.zip" class="btn btn-primary" download>⬇ Download PYCORE IDE</a>
+      <div class="dl-meta" style="margin-top:18px">v1.0 &nbsp;·&nbsp; Windows 64-bit &nbsp;·&nbsp; portable ZIP</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="credit">PY<b>CORE</b> IDE — standalone Python for everyone.</div>
+    <div class="made">Created by Aryan Singh</div>
+  </div>
+</footer>
+
+<script>
+// ---------- matrix rain background ----------
+(function(){
+  const c=document.getElementById('matrix'),x=c.getContext('2d');
+  let w,h,cols,drops;
+  const chars="01アイウエオカキクケコ#$%&PYCORE".split("");
+  function resize(){
+    w=c.width=innerWidth;h=c.height=innerHeight;
+    cols=Math.floor(w/16);drops=Array(cols).fill(1);
+  }
+  resize();addEventListener('resize',resize);
+  function draw(){
+    x.fillStyle="rgba(13,17,23,.08)";x.fillRect(0,0,w,h);
+    x.fillStyle="#3fb950";x.font="14px monospace";
+    for(let i=0;i<drops.length;i++){
+      const t=chars[Math.floor(Math.random()*chars.length)];
+      x.fillText(t,i*16,drops[i]*16);
+      if(drops[i]*16>h&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw,55);
+})();
+
+// ---------- hero typing animation ----------
+(function(){
+  const el=document.getElementById('typed');
+  const lines=[
+    {t:'>>> ',cls:'c-green',same:true},
+    {t:'name = input("Your name: ")\n',cls:''},
+    {t:'>>> ',cls:'c-green',same:true},
+    {t:'print(f"Hello, {name}! Welcome to PYCORE.")\n',cls:''},
+    {t:'Hello, Aryan! Welcome to PYCORE.\n',cls:'c-cyan'},
+    {t:'\n[pip] ',cls:'c-orange',same:true},
+    {t:'installing requests... ',cls:'c-muted',same:true},
+    {t:'done ✓\n',cls:'c-green'},
+    {t:'\n🤖 PYCORE AI: ',cls:'c-mag',same:true},
+    {t:'no errors — clean run!\n',cls:'c-muted'},
+  ];
+  let li=0,ci=0;
+  function tick(){
+    if(li>=lines.length){
+      const cur=document.createElement('span');cur.className='cursor';el.appendChild(cur);
+      return;
+    }
+    const L=lines[li];
+    if(ci===0){
+      var span=document.createElement('span');
+      span.className=L.cls;span.dataset.active="1";el.appendChild(span);
+    }
+    const span2=el.querySelector('span[data-active="1"]');
+    span2.textContent+=L.t[ci];ci++;
+    if(ci>=L.t.length){span2.removeAttribute('data-active');li++;ci=0;
+      setTimeout(tick,L.same?60:160);
+    }else{
+      setTimeout(tick,18+Math.random()*30);
+    }
+  }
+  setTimeout(tick,500);
+})();
+</script>
+</body>
+</html>
