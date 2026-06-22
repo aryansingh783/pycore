@@ -213,7 +213,9 @@
     background:linear-gradient(100deg,var(--cyan),var(--magenta));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .creator .role{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .creator .role{color:var(--cyan);font-size:14px;margin-bottom:14px}
+  .creator-bio{color:var(--muted);font-size:14px;line-height:1.6;max-width:440px;margin:0 auto 14px}
+  .creator-meta{color:var(--green);font-size:13px;margin-bottom:22px;font-weight:600}
   .socials{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
   .social-btn{
     display:inline-flex;align-items:center;gap:9px;text-decoration:none;
@@ -223,6 +225,7 @@
   .social-btn svg{width:18px;height:18px}
   .social-btn.ig:hover{border-color:#e1306c;color:#e1306c;transform:translateY(-2px)}
   .social-btn.gh:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+  .social-btn.em:hover{border-color:var(--green);color:var(--green);transform:translateY(-2px)}
 
   footer .foot-bottom{text-align:center;color:var(--muted);font-size:13px}
   footer .foot-bottom b{color:var(--green)}
@@ -409,7 +412,9 @@ cloudflared tunnel --url http://localhost:11434</pre>
       <img src="logo.png" alt="PYCORE logo" class="creator-logo">
       <div class="made-by">Designed &amp; Developed by</div>
       <div class="name">Aryan Singh</div>
-      <div class="role">Creator of PYCORE IDE</div>
+      <div class="role">Class 12 student &amp; developer from India</div>
+      <div class="creator-bio">Creator of PYCORE IDE — built solo over two months to make Python coding easy for students, even on machines with nothing installed.</div>
+      <div class="creator-meta">📅 Developed April – June 2026</div>
       <div class="socials">
         <a href="https://instagram.com/aryan.singh.783" class="social-btn ig" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -424,6 +429,13 @@ cloudflared tunnel --url http://localhost:11434</pre>
             <path d="M12 .5C5.37.5 0 5.78 0 12.292c0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.725-1.335-1.725-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.235-3.164-.135-.297-.54-1.497.105-3.121 0 0 1.005-.31 3.3 1.209a11.6 11.6 0 0 1 3.003-.395c1.02.005 2.046.131 3.003.395 2.28-1.519 3.285-1.209 3.285-1.209.645 1.624.24 2.824.12 3.121.765.825 1.23 1.877 1.23 3.164 0 4.53-2.805 5.527-5.475 5.817.42.354.81 1.077.81 2.182 0 1.578-.015 2.846-.015 3.229 0 .315.21.687.825.567C20.565 21.917 24 17.495 24 12.292 24 5.78 18.627.5 12 .5z"/>
           </svg>
           GitHub
+        </a>
+        <a href="mailto:pycore.dev@gmail.com" class="social-btn em">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M22 7l-10 6L2 7"/>
+          </svg>
+          Email
         </a>
       </div>
     </div>
