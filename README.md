@@ -23,7 +23,7 @@ Built for students, school labs, and thin clients.
 
 Most Python IDEs assume Python is already installed and set up correctly. In a school lab, on a friend's laptop, or on a locked-down thin client, that assumption breaks — "Python is not recognized", missing PATH, no admin rights.
 
-PYCORE IDE ships a **real Python interpreter inside the app**. No installer, no setup. Extract the folder, double-click, and you're coding. `pip install` works from inside the app, so you can pull in `pandas`, `requests`, anything — and the packages stay in the app folder for next time.
+PYCORE IDE ships a **real Python interpreter inside the app**. Run the installer, and you're coding. `pip install` works from inside the app, so you can pull in `pandas`, `requests`, anything — and the packages stay in the app folder for next time.
 
 ---
 
@@ -31,7 +31,7 @@ PYCORE IDE ships a **real Python interpreter inside the app**. No installer, no 
 
 > **Windows 10/11 (64-bit).** No Python required.
 
-**[⬇ Download the latest release](../../releases/latest)** — grab `PYCORE_IDE.zip`, extract it, and run `PYCORE_IDE.exe`.
+**[⬇ Download the latest release](../../releases/latest)** — grab `PYCORE_IDE_Setup.exe`, run it, and follow the wizard.
 
 That's the whole installation. See [Installation](#installation) for the step-by-step.
 
@@ -56,13 +56,15 @@ That's the whole installation. See [Installation](#installation) for the step-by
 
 ## Installation
 
-No installer. Three steps:
+No manual setup. Three steps:
 
-1. **Download** `PYCORE_IDE.zip` from the [Releases page](../../releases/latest).
-2. **Extract** the folder fully (right-click → Extract All). Don't run from inside the ZIP. A USB drive or any local folder works.
-3. **Run** `PYCORE_IDE.exe` inside the extracted folder.
+1. **Download** `PYCORE_IDE_Setup.exe` from the [Releases page](../../releases/latest).
+2. **Run** the installer and follow the wizard — pick an install location and whether to add a desktop shortcut.
+3. **Launch** PYCORE IDE from your desktop or the Windows search bar.
 
 > If Windows shows a blue **"Windows protected your PC"** box, click **More info → Run anyway**. The app is safe — it's just unsigned.
+>
+> **Tip:** to use `pip install` without admin rights, install to a user folder (e.g. `C:\PYCORE IDE`) instead of Program Files.
 
 ### Optional: turn on AI
 
