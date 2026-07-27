@@ -97,7 +97,11 @@
     </div>
 
     <div style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:24px">
-      <h3 style="font-size:15px;margin-bottom:4px">🔑 PYCORE AI</h3>
+      <h3 style="font-size:15px;margin-bottom:4px">🔑 PYCORE AI — Gemini Keys</h3>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:14px">
+        The app fetches these keys every 5 minutes. Update here anytime a key is
+        rate-limited, banned, or rotated — no rebuild or re-download needed for users.
+      </p>
       <label style="font-size:12px;color:var(--muted)">Main key</label>
       <input type="text" id="keyMain" style="width:100%;background:var(--bg-alt);color:var(--fg);
         border:1px solid #30363d;padding:9px;border-radius:6px;font-family:inherit;margin:4px 0 12px">
@@ -120,10 +124,10 @@
     <div id="emptyMsg" class="empty" style="display:none">No requests yet.</div>
 
     <h2 style="font-size:17px;margin:32px 0 4px;color:var(--cyan)">Issued Licenses</h2>
-    <p class="sub" style="margin-bottom:14px">Ban a license to lock that user out within ~5 minutes.</p>
+    <p class="sub" style="margin-bottom:14px">Ban a license to lock that user out within ~5 minutes. Each license auto-locks to the first device that activates it — use Reset Device if a user legitimately switches PCs.</p>
     <table>
       <thead>
-        <tr><th>Email</th><th>Category</th><th>License Key</th><th>Daily Limit</th><th>Status</th><th>Actions</th></tr>
+        <tr><th>Email</th><th>Category</th><th>License Key</th><th>Daily Limit</th><th>Device</th><th>Status</th><th>Actions</th></tr>
       </thead>
       <tbody id="licRows"></tbody>
     </table>
@@ -421,16 +425,23 @@
       const statusBadge = l.is_active
         ? `<span class="badge approved">active</span>`
         : `<span class="badge rejected">banned</span>`;
+      const deviceCell = l.bound_machine_id
+        ? `<span style="font-family:monospace;font-size:11px" title="${esc(l.bound_machine_id)}">${esc(l.bound_machine_id.slice(0,10))}…</span>`
+        : `<span style="color:var(--muted);font-size:12px">not yet used</span>`;
       tr.innerHTML = `
         <td>${esc(l.email)}</td>
         <td><span class="badge ${l.category}">${l.category}</span></td>
         <td style="font-family:monospace;font-size:12px">${esc(l.license_key)}</td>
         <td>${l.daily_limit}</td>
+        <td>${deviceCell}</td>
         <td>${statusBadge}</td>
         <td class="actions">
           ${l.is_active
             ? `<button class="reject" onclick="toggleLicense('${l.license_key}', false)">Ban</button>`
             : `<button class="approve" onclick="toggleLicense('${l.license_key}', true)">Unban</button>`}
+          ${l.bound_machine_id
+            ? `<button class="view" onclick="resetDevice('${l.license_key}')">Reset Device</button>`
+            : ""}
         </td>`;
       rows.appendChild(tr);
     });
@@ -450,6 +461,21 @@
       return;
     }
     showToast(`✓ License ${makeActive ? "unbanned" : "banned"}. Takes effect within ~5 minutes.`);
+    loadLicenses();
+  }
+
+  async function resetDevice(key) {
+    if (!confirm("Unlock this license from its current device? The next computer that activates it will become the new locked device.")) return;
+
+    const { data, error } = await sb.rpc("admin_reset_license_machine", {
+      p_license_key: key
+    });
+
+    if (error || !data.ok) {
+      showToast("Failed: " + (error?.message || data.error));
+      return;
+    }
+    showToast("✓ Device unlocked. The key can now be activated on a new computer.");
     loadLicenses();
   }
 </script>
